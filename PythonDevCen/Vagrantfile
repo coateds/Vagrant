@@ -1,0 +1,76 @@
+# Information source: run vagrant/virtualbox/centos7 in GUI mode
+# https://codingbee.net/tutorials/vagrant/vagrant-enabling-a-centos-vms-gui-mode
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "bento/centos-7.4"
+
+  config.vm.network "private_network", type: "dhcp"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = true  # brings up the vm in gui window
+    vb.memory = 2048
+    vb.cpus = 2
+  end
+
+  config.vm.provision "chef_solo" do |chef|
+    chef.add_recipe "python"
+  end
+end
+
+# Clear top warning bars and logon
+# cd /vagrant
+# no need to set execute permisions
+# sudo ./gui.sh
+# Note: could not execute a file that was created on host/shared folder
+# solution was to create file on guest and then copy contents at the host
+# sudo su to root before running script
+
+# When script is complete:  `vagrant halt ; vagrant up` at host
+
+# logon with password 'vagrant'
+
+# right 'ctrl' key to release mouse
+
+#####################################
+# Increase video resolution
+#####################################
+# new vm settings: set video memory to 128mb from vb gui (halt machine first)
+# install VirtualBox Guest additions specific to host version of VirtualBox
+# vboxmanage --version
+# 5.2.12r122591
+# Therefore, downloading VBoxGuestAdditions_5.2.12.iso
+# from http://download.virtualbox.org/virtualbox/5.2.12/
+# to my downloads on laptop (host)
+# yum install kernel-devel
+# Make a place to mount the iso and then mount it.
+# mkdir /mnt/VBoxLinuxAdditions
+# mount /dev/cdrom /mnt/VBoxLinuxAdditions
+# Run the install script
+# sh /mnt/VBoxLinuxAdditions/VBoxLinuxAdditions.run
+# Source:  https://www.megajason.com/2017/06/10/install-virtualbox-guest-additions-on-centos-7/
+
+# Set up shared clipboard from the devices menu
+
+# upgrade git and install vscode
+# sudo yum install git -y
+# Installs an old version
+# sudo yum install http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm
+# sudo yum install/upgrade git -y
+# VSCode Install process
+# sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+# sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+# yum check-update
+# sudo yum install code -y
+# Enter `code` in the terminal to launch  (for now...)
+
+#####################################
+# Manual steps accomplished by script
+#####################################
+# sudo -i 
+# yum groupinstall -y 'gnome desktop'
+# yum install -y 'xorg*'
+# yum remove -y initial-setup initial-setup-gui
+# systemctl isolate graphical.target
+# systemctl set-default graphical.target   # to make this persistant
+

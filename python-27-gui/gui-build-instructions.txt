@@ -1,0 +1,12 @@
+vagrant up with the Vagrantfile and cookbook included
+I usually comment out the `vb.gui = true` command in Vagrantfile, 
+but not sure it is necessary to do so
+
+when complete, vagrant halt
+In gui, add cd rom
+vagrant up
+mnt cd rom and run sh script
+
+turn gui on in Vagrant file and reboot/reload
+
+turn on clipboard, etc

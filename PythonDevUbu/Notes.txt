@@ -1,0 +1,10 @@
+==> default: Mounting shared folders...
+    default: /vagrant => C:/Users/dcoate/Documents/VagrantBoxes/PythonDevUbu
+C:\Users\dcoate\Documents\VagrantBoxes\PythonDevUbu> vagrant init hashicorp/precise64
+
+build structure for Chef cookbook
+└───cookbooks
+    └───ubuntu-python-dev
+        └───recipes
+
+In this simplest of iterations, Chef is invoked and installs git. It needs to run an update first, but over to CentOS next

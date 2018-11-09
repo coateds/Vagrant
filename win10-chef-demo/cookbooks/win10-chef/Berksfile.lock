@@ -1,0 +1,7 @@
+DEPENDENCIES
+  win10-chef
+    path: .
+    metadata: true
+
+GRAPH
+  win10-chef (0.0.0)

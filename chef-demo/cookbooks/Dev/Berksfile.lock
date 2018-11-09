@@ -1,0 +1,7 @@
+DEPENDENCIES
+  chef-demo
+    path: .
+    metadata: true
+
+GRAPH
+  chef-demo (0.0.0)

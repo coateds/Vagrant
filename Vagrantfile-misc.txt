@@ -1,0 +1,18 @@
+config.vm.box = "hashicorp/precise64"
+
+config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+config.vm.network "forwarded_port", guest: 80, host: 8080
+config.vm.provision "shell", path: "provision.sh"
+config.vm.synced_folder "../data", "/vagrant_data"
+# synced_folder seems to work one way: from the host to the guest
+# therefore it is not a reasonable way to edit st2 files from the host with VSCode
+
+
+provision.sh
+#!/usr/bin/env bash
+
+echo "installing apache and setting it up... please wait"
+apt-get update >/dev/null 2>&1
+apt-get install -y apache2
+sudo rm -rf /var/www
+sudo ln -fs /vagrant_data /var/www

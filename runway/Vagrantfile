@@ -1,0 +1,52 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require 'getoptlong'
+VAGRANTFILE_API_VERSION = "2"
+
+opts = GetoptLong.new(
+  [ '--install', GetoptLong::OPTIONAL_ARGUMENT ]
+)
+
+install=''
+
+opts.each do |opt, arg|
+  case opt
+    when '--install'
+      install=arg
+  end
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "bento/centos-7.4"
+  config.vm.hostname = "hiflexdev002"
+  config.vm.network :private_network, ip: "192.168.16.26"
+  # config.vm.network "private_network", type: "dhcp"
+  config.ssh.forward_agent = true
+  config.vm.provider :virtualbox do |vb|
+    vb.name = "hiflexdev002"
+    # vb.gui = true
+    vb.customize [
+      'modifyvm', :id,
+      '--natdnshostresolver1', 'on',
+      '--memory', '4096',
+      '--cpus', '2'
+    ]
+  end
+  
+  # Enable after first installation (cifs-utils)
+  # config.vm.synced_folder "C:/Users/dcoate/Documents/VagrantBoxes/st2-sandbox/Vagrant/st2packs", "/opt/stackstorm/packs", type: "smb"
+  # config.vm.synced_folder ".", "/vagrant", disabled: true
+ 
+  config.vm.provision "shell", path: "provision.sh"
+
+  config.vm.provision :file, source: "runme.sh", destination: "/home/vagrant/runme.sh"
+  config.vm.provision :file, source: "load-guest-additions.sh", destination: "/home/vagrant/load-guest-additions.sh"
+  config.vm.provision :file, source: "load-vscode.sh", destination: "/home/vagrant/load-vscode.sh"
+  # config.vm.provision :file, source: "../kitchen.yml", destination: "/home/vagrant/kitchen.yml"
+  # config.vm.provision "shell", path: "vagrant-kick.sh", privileged: true, args: "--install=#{install}"
+
+  config.vm.provision "chef_solo" do |chef|
+    chef.add_recipe "st2-sandbox"
+  end
+end

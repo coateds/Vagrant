@@ -1,0 +1,31 @@
+---
+driver:
+  name: docker
+  binary: docker
+  use_sudo: false
+  pid_one_command: /usr/lib/systemd/systemd
+  volumes:
+    - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  cap_add:
+    - SYS_ADMIN
+  forward:
+    - 9990:80
+    - 9999:443
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: centos-7.4
+    driver_config:
+      image: centos/systemd
+      run_command: /usr/sbin/init
+      privileged: true
+      provision_command:
+        - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+        - systemctl enable sshd.service
+
+suites:
+  - name: default
+    run_list:
+    attributes:
