@@ -1,7 +1,24 @@
 
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "hashicorp/precise64"
+  # Version 12.04
+  # config.vm.box = "hashicorp/precise64"
+  
+  # Version 14.04
+  # config.vm.box = "ubuntu/trusty64"
+
+  # Version 16.04
+  # Comes with Python 3.5.2
+  # config.vm.box = "ubuntu/xenial64"
+
+  # Version 18.04
+  config.vm.box = "ubuntu/bionic64"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = true  # brings up the vm in gui window
+    vb.memory = 2048
+    vb.cpus = 2
+  end
 
   config.vm.provision "chef_solo" do |chef|
     chef.add_recipe "ubuntu-python-dev"
